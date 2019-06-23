@@ -44,7 +44,7 @@ class UserSignInView(JsonView):
 
     def post(self, request):
         user = User.objects.filter(
-            customer__email=request.POST['phone_number'],
+            phone_number=request.POST['phone_number'],
             deleted_at__isnull=True
         ).first()
         if not user:
