@@ -3,7 +3,7 @@ import uuid
 from typing import Iterable
 
 from django.contrib.auth.base_user import AbstractBaseUser
-from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.models import PermissionsMixin, UserManager
 from django.contrib.gis.db import models
 from django.contrib.sessions.models import Session
 from django.utils import timezone
@@ -42,6 +42,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         null=True,
         blank=True
     )
+    objects = UserManager()
 
     def delete(self, **kwargs):
         self.deleted_at = datetime.datetime.now()
