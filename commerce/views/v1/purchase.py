@@ -12,7 +12,7 @@ class PurchaseView(JsonView):
     def post(self, request):
         return {
             'code': 'success',
-            'total_price': self.get_total_price(request.POST['option_ids'])
+            'total_price': self.get_total_price(request.POST['option_ids']),
         }
 
     @transaction.atomic
@@ -30,7 +30,7 @@ class PurchaseView(JsonView):
             'code': 'success',
             'purchase_id': purchase.id,
             'purchase_list': [
-                r.option.to_dict(with_product_info=True) for r in purchase.rows
+                r.option.to_dict(with_product_info=True) for r in purchase.rows.all()
             ],
             'total_price': purchase.paid_price,
         }
