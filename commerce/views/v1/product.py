@@ -13,7 +13,9 @@ class ProductView(JsonView):
 
 class ShoppingCartView(JsonView):
     LOGIN_REQUIRED = True
-    REQUIRED_FIELDS = ('option_id',)
+    REQUIRED_FIELDS = {
+        'POST': ('option_id',)
+    }
 
     def get(self, request):
         return {
