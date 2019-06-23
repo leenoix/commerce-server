@@ -1,8 +1,8 @@
 from django.contrib.gis import admin
 
-from commerce.models import ProductOption
+from commerce.models import Product
 
 
-@admin.register(ProductOption)
-class ProductOptionAdmin(admin.ModelAdmin):
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
     pass
