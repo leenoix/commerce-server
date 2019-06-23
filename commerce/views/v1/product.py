@@ -15,7 +15,6 @@ class ShoppingCartView(JsonView):
     LOGIN_REQUIRED = True
     REQUIRED_FIELDS = {
         'POST': ('option_id',),
-        'DELETE': ('option_ids',),
     }
 
     def get(self, request):
@@ -33,7 +32,14 @@ class ShoppingCartView(JsonView):
         request.user.cart_items.add(option)
         return {'code': 'success'}
 
-    def delete(self, request):
-        request.user.cart_items.remove(*ProductOption.objects.filter(id__in=request.DELETE['option_ids']))
+
+class ShoppingCartDeleteView(JsonView):
+    LOGIN_REQUIRED = True
+    REQUIRED_FIELDS = {
+        'POST': ('option_ids',),
+    }
+
+    def post(self, request):
+        request.user.cart_items.remove(*ProductOption.objects.filter(id__in=request.POST['option_ids']))
         return {'code': 'success'}
 
