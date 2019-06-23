@@ -74,4 +74,4 @@ class UserSignOutView(JsonView):
     def get(self, request):
         UserSession.objects.filter(user=request.user).delete()
         logout(request)
-        return {'code': 'SUCCESS', 'message': 'success'}
+        return {'code': 'success', 'message': 'success'}
