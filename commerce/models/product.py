@@ -46,6 +46,20 @@ class Product(models.Model):
         self.deleted_at = datetime.datetime.now()
         self.save()
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'price': self.price,
+            'image': self.image.url if self.image else '',
+            'provider': self.provider.name,
+            'description': self.description,
+            'shipping_method': self.shipping_method,
+            'shipping_price': self.shipping_price,
+            'can_bundle': self.can_bundle,
+            'options': [o.to_dict() for o in self.options.filter(deleted_at=None)]
+        }
+
 
 class ProductOption(models.Model):
     class Meta:
@@ -83,3 +97,11 @@ class ProductOption(models.Model):
     def delete(self, using=None, keep_parents=False):
         self.deleted_at = datetime.datetime.now()
         self.save()
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'stock': self.stock,
+            'size': self.size,
+            'color': self.color,
+        }
