@@ -62,12 +62,6 @@ class ProductOption(models.Model):
         return self.id
 
     id = models.AutoField(primary_key=True)
-    image = models.ImageField(
-        null=True,
-        blank=True,
-        max_length=500,
-        upload_to='product_image'
-    )
     product = models.ForeignKey(
         Product,
         related_name='options',
@@ -79,6 +73,11 @@ class ProductOption(models.Model):
         max_length=3,
         choices=SizeChoice.choices(),
         default=SizeChoice.M.name
+    )
+    color = models.CharField(
+        max_length=30,
+        verbose_name='색상',
+        default='white'
     )
 
     def delete(self, using=None, keep_parents=False):
