@@ -47,7 +47,7 @@ class PurchaseView(JsonView):
                 product__provider=provider, product__can_bundle=False
             ).aggregate(total=Sum('product__shipping_price'))['total'] or 0
             total_price += options.filter(
-                product__provider=provider, product_can_bundle=True
+                product__provider=provider, product__can_bundle=True
             ).aggregate(min=Min('product__shipping_price'))['min'] or 0
 
         return total_price
