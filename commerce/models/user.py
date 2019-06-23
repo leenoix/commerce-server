@@ -2,14 +2,48 @@ import datetime
 import uuid
 from typing import Iterable
 
-from django.contrib.auth.base_user import AbstractBaseUser
-from django.contrib.auth.models import PermissionsMixin, UserManager
+from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import PermissionsMixin
 from django.contrib.gis.db import models
 from django.contrib.sessions.models import Session
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 import random
+
+
+class UserQuerySet(models.QuerySet):
+    def delete(self):
+        self.update(deleted_at=datetime.datetime.now())
+
+
+class CommerceUserManager(BaseUserManager):
+    use_in_migrations = True
+
+    def _create_user(self, phone_number, password, **extra_fields):
+        """
+        Creates and saves a User with the given username, email and password.
+        """
+        if not phone_number:
+            raise ValueError('The given username must be set')
+        phone_number = self.model.normalize_username(phone_number)
+        user = self.model(phone_number=phone_number, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def get_queryset(self):
+        return UserQuerySet(self.model, using=self._db)\
+            .filter(deleted_at=None)
+
+    def create_user(self, phone_number, password=None, **extra_fields):
+        return self._create_user(phone_number, password, **extra_fields)
+
+    def create_superuser(self, username, password, **extra_fields):
+        user = self.model(username=username, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -46,7 +80,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         null=True,
         blank=True
     )
-    objects = UserManager()
+    objects = CommerceUserManager()
 
     def delete(self, **kwargs):
         self.deleted_at = datetime.datetime.now()
