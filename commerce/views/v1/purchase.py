@@ -36,7 +36,7 @@ class PurchaseView(JsonView):
         }
 
     def get_total_price(self, option_ids):
-        options = ProductOption.objects.filter(id__in=option_ids, deleted_at=None, stock__gt=0).distinct()
+        options = ProductOption.objects.filter(id__in=option_ids, deleted_at=None, stock__gt=0)
 
         total_price = options.aggregate(total=Sum('product__price'))['total'] or 0
 
