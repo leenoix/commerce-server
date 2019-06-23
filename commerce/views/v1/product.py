@@ -15,6 +15,12 @@ class ShoppingCartView(JsonView):
     LOGIN_REQUIRED = True
     REQUIRED_FIELDS = ('option_id',)
 
+    def get(self, request):
+        return {
+            'code': 'success',
+            'data': [o.to_dict(with_product_info=True) for o in request.user.cart_items.all()]
+        }
+
     def post(self, request):
         try:
             option = ProductOption.objects.get(id=request.POST['option_id'])

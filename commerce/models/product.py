@@ -98,10 +98,17 @@ class ProductOption(models.Model):
         self.deleted_at = datetime.datetime.now()
         self.save()
 
-    def to_dict(self):
-        return {
+    def to_dict(self, with_product_info=False):
+        _dict = {
             'id': self.id,
             'stock': self.stock,
             'size': self.size,
             'color': self.color,
         }
+        if with_product_info:
+            product = self.product
+            _dict['name'] = product.name
+            _dict['price'] = product.price
+            _dict['image'] = product.image.url if product.image else ''
+            _dict['provider'] = product.provider.name
+        return _dict
