@@ -1,2 +1,1 @@
-from commerce.views.v1.test import *
-
+from commerce.views.v1.user import *
