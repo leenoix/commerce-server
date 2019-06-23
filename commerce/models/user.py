@@ -93,6 +93,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         null=True,
         blank=True
     )
+    cart_items = models.ManyToManyField(
+        'ProductOption',
+        verbose_name='장바구니',
+        related_name='users',
+        blank=True
+    )
     objects = CommerceUserManager()
 
     def delete(self, **kwargs):
