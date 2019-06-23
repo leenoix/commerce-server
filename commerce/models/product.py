@@ -35,7 +35,7 @@ class Product(models.Model):
     )
     description = models.TextField(null=True, blank=True)
     shipping_method = models.CharField(
-        max_length=2,
+        max_length=7,
         choices=ShippingChoice.choices(),
         default=ShippingChoice.FREE.name
     )
@@ -76,7 +76,7 @@ class ProductOption(models.Model):
     stock = models.IntegerField(default=0, verbose_name='재고')
     deleted_at = models.DateTimeField(null=True, blank=True)
     size = models.CharField(
-        max_length=2,
+        max_length=3,
         choices=SizeChoice.choices(),
         default=SizeChoice.M.name
     )
