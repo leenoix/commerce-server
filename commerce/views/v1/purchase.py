@@ -17,10 +17,10 @@ class PurchaseView(JsonView):
 
     @transaction.atomic
     def patch(self, request):
-        options = ProductOption.objects.filter(id__in=request.PATCH['option_ids'])
+        options = ProductOption.objects.filter(id__in=request.PATCH['option_ids'], deleted_at=None, stock__gt=0)
         purchase = request.user.purchases.create(
-            user = request.user,
-            paid_price = self.get_total_price(request.PATCH['option_ids'])
+            user=request.user,
+            paid_price=self.get_total_price(request.PATCH['option_ids'])
         )
 
         for option in options:
@@ -36,13 +36,12 @@ class PurchaseView(JsonView):
         }
 
     def get_total_price(self, option_ids):
-        total_price = 0
+        options = ProductOption.objects.filter(id__in=option_ids, deleted_at=None, stock__gt=0).distinct()
 
-        options = ProductOption.objects.filter(id__in=option_ids)
+        total_price = options.aggregate(total=Sum('product__price'))['total'] or 0
 
         for provider in ProductOption.objects.all().distinct('product__provider').values('product__provider'):
             provider = provider['product__provider']
-            total_price += options.aggregate(total=Sum('product__price'))['total'] or 0
             total_price += options.filter(
                 product__provider=provider, product__can_bundle=False
             ).aggregate(total=Sum('product__shipping_price'))['total'] or 0
