@@ -85,6 +85,9 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 AUTH_USER_MODEL = 'commerce.User'
+AUTHENTICATION_BACKENDS = (
+    'commerce.backends.ModelBackend',
+)
 
 AUTH_PASSWORD_VALIDATORS = [
     {
