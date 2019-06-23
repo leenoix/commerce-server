@@ -24,6 +24,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         max_length=15,
         unique=True
     )
+    email = models.EmailField(
+        null=True,
+        blank=True
+    )
     name = models.CharField(
         max_length=15,
         null=True,
