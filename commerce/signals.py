@@ -16,7 +16,6 @@ def user_logged_in_handler(sender, user, request, **kwargs):
         user__deleted_at__isnull=True
     ).exclude(
         id=session.id,
-        endpoint_arn=session.endpoint_arn
     )
 
     for row in old_sessions:
