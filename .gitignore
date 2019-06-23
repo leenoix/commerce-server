@@ -1,0 +1,11 @@
+*.py[co]
+.*.sw[po]
+db.sqlite3
+.idea
+local_settings.py
+/static
+/log
+__pycache__
+.python-version
+/media
+.DS_Store
