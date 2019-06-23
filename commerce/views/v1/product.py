@@ -7,5 +7,5 @@ class ProductView(JsonView):
         return {
             'code': 'success',
             'data': [p.to_dict()
-                     for p in Product.objects.filter(delete_at=None, is_active=True).order_by('provider')]
+                     for p in Product.objects.filter(deleted_at=None, is_active=True).order_by('provider')]
         }
