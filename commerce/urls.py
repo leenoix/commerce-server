@@ -9,4 +9,5 @@ urlpatterns = [
     path('v1/users/sign-out', v1.UserSignOutView.as_view()),
 
     path('v1/products', v1.ProductView.as_view()),
+    path('v1/cart', v1.ShoppingCartView.as_view()),
 ]
