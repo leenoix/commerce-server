@@ -59,7 +59,7 @@ class ProductOption(models.Model):
         XL = '특대'
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
     id = models.AutoField(primary_key=True)
     product = models.ForeignKey(
