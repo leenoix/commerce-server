@@ -1,4 +1,4 @@
-from commerce.models import Product
+from commerce.models import Product, ProductOption
 from commerce.views import JsonView
 
 
@@ -9,3 +9,17 @@ class ProductView(JsonView):
             'data': [p.to_dict()
                      for p in Product.objects.filter(deleted_at=None, is_active=True).order_by('provider')]
         }
+
+
+class ShoppingCartView(JsonView):
+    LOGIN_REQUIRED = True
+    REQUIRED_FIELDS = ('option_id',)
+
+    def post(self, request):
+        try:
+            option = ProductOption.objects.get(id=request.POST['option_id'])
+        except Exception:
+            return dict(code='OPTION_NOT_FOUND', message='Option is not found'), 400
+
+        request.user.cart_items.add(option)
+        return {'code': 'success'}
