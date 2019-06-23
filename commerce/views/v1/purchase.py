@@ -41,6 +41,7 @@ class PurchaseView(JsonView):
         options = ProductOption.objects.filter(id__in=option_ids)
 
         for provider in ProductOption.objects.all().distinct('product__provider').values('product__provider'):
+            provider = provider['product__provider']
             total_price += options.aggregate(total=Sum('product__price'))['total'] or 0
             total_price += options.filter(
                 product__provider=provider, product__can_bundle=False
