@@ -18,6 +18,10 @@ class PurchaseView(JsonView):
     @transaction.atomic
     def patch(self, request):
         options = ProductOption.objects.filter(id__in=request.PATCH['option_ids'], deleted_at=None, stock__gt=0)
+        for option in options:
+            option.stock -= 1
+            option.save()
+
         purchase = request.user.purchases.create(
             user=request.user,
             paid_price=self.get_total_price(request.PATCH['option_ids'])
